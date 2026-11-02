@@ -72,6 +72,8 @@ namespace SevenDaysForAccessibility
         internal static ConfigEntry<bool> CfgChoiceHotkeys;
         internal static ConfigEntry<string> CfgSilenceKey;
         internal static ConfigEntry<string> CfgRepeatKey;
+        /// <summary>运行中切换语音后端的按键（支持 Alt+Shift+F9 这类写法）。</summary>
+        internal static ConfigEntry<string> CfgBackendKey;
         internal static ConfigEntry<string> CfgSpeechBackend;
         internal static ConfigEntry<bool> CfgAnnounceOnSkipStop;
 
@@ -144,6 +146,11 @@ namespace SevenDaysForAccessibility
                 "可以填：自动 / Tolk / NVDA / 争渡 / SAPI。\n" +
                 "钉死的后端不可用时**不会**回退 —— 这是刻意的，用于排查。");
 
+            CfgBackendKey = Config.Bind("朗读", "切换语音后端按键", "Alt+Shift+F9",
+                "运行中切换语音后端的按键。可写修饰键组合，例如 F9、Alt+Shift+F9、Ctrl+Alt+F9。\n" +
+                "按一下切到下一个「当前可用」的后端（自动 → Tolk → NVDA → 争渡 → SAPI → 自动），\n" +
+                "探测不到的会被跳过并在播报里说明；选择会写进本配置文件，下次启动仍生效。\n" +
+                "留空则关闭这个功能键。默认避开游戏占用的键（F9 是读档界面，所以用组合键）。");
             CfgAnnounceOnSkipStop = Config.Bind("朗读", "快进停止时补念当前句", true,
                 "快进（游戏里按 S 或按住 Ctrl）停下来的时候，把停在的那一句补念出来。\n" +
                 "快进期间本补丁不朗读（否则会刷屏），所以停下来那一刻屏幕上是什么，\n" +
@@ -333,6 +340,15 @@ namespace SevenDaysForAccessibility
                     if (rk != KeyCode.None && KeyEdge.Pressed(rk)) Repeat.Again();
                 }
 
+                // 运行中切换语音后端：平台层出结论文本，这里经 Repeat 念出来
+                // （L1 唯一的朗读出口；也是 Framework 的约定 —— 平台层自己发声会绕过重读缓冲）。
+                if (CfgBackendKey != null && !string.IsNullOrEmpty(CfgBackendKey.Value)
+                    && Hotkey.Down(CfgBackendKey.Value))
+                {
+                    string say = Speech.CycleAvailable();
+                    if (!string.IsNullOrEmpty(say)) Repeat.Say(say, true);
+                }
+
                 // 快进停止时补念最后一句（快进期间行流只记不念，见 Watcher.Lines）
                 Watcher.SkipEdge();
 
@@ -341,7 +357,8 @@ namespace SevenDaysForAccessibility
                 {
                     _hinted = true;
                     Repeat.Say("《我与你共度的七日》无障碍补丁已加载。空格推进对话，退格键重读，"
-                               + "H 键历史回看，Esc 打开菜单，选项按数字键。", true);
+                               + "H 键历史回看，Esc 打开菜单，选项按数字键。"
+                               + "Alt 加 Shift 加 F9 切换语音后端。", true);
                 }
             }
             catch (Exception e)
