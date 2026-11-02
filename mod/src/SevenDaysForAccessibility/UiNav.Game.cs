@@ -1,0 +1,186 @@
+using System;
+using System.Collections.Generic;
+using System.Reflection;
+using TMPro;
+using UnityEngine;
+using UnityEngine.UI;
+
+namespace SevenDaysForAccessibility
+{
+    /// <summary>
+    /// UiNav 的**逐作区**（partial class）。
+    ///
+    /// 平台层 platform\UiNav.cs 里是 `internal static partial class UiNav`，
+    /// 本文件是同一个类的另一半：引擎侧扫描/播报逻辑在平台层，这里只放
+    /// 「只有本作才知道」的数据——对象名别名、输入框角色、标签/分组钩子。
+    ///
+    /// 纪律：
+    ///   · 平台层一行都不要改；所有游戏类型引用都只能出现在这里或 Plugin.cs。
+    ///   · 播报一律走 Repeat.Say（不要直接调 Speech.Speak）——否则玩家按
+    ///     重读键听不到刚念的内容（已有两个姊妹作的早期版本
+    ///     踩的是同一个坑，tools\lint_repeat.ps1 会机械拦住）。
+    /// </summary>
+    internal static partial class UiNav
+    {
+        /// <summary>
+        /// 设置面板里那些「美术字标签」的对象名 → 中文。
+        ///
+        /// 上一作里一批控件的文字是**画在图片上**的，TMP 里一个字都没有，
+        /// 所以只能退回对象名 —— 而对象名是 Gallery / Options 这种。
+        /// 这里按对象名给出中文。每一条都要有依据，不要凭感觉往里加：
+        ///
+        ///   · 标题旋转菜单的五个按钮，名字与动作的对应是从
+        ///     ClockwiseMenuController.Awake 里实查的：
+        ///       SetButtonAction(0, handler.QuitGame)
+        ///       SetButtonAction(1, handler.OpenSettings)
+        ///       SetButtonAction(2, handler.StartGame)
+        ///       SetButtonAction(3, handler.LoadSave)
+        ///       SetButtonAction(4, handler.OpenGallery)
+        ///     对象名则是 probe 的场景树转储里实查的：
+        ///       Canvas/Panel/Background/Menu/Buttons 下依次是
+        ///       Gallery / Load / Start / Options / Exit。
+        ///
+        ///   · 画廊页签名（CG / 视频 / 音乐 / 语音）本身是 TMP 文字，
+        ///     不需要别名 —— 别名只在控件子树里**一个字都没有**时才会被用到
+        ///     （见 TextOf），所以不会盖掉正常按钮的朗读。
+        ///
+        /// ★ 下面这份是**示例**，换成本作 probe 转储里实查的对象名。
+        ///   ★ 字典是 OrdinalIgnoreCase：只差大小写的两个键（例如 Start / start）
+        ///   会在静态构造时抛 ArgumentException → TypeInitializationException，
+        ///   表现为**导航 100% 失效且没有任何日志**。
+        ///   ★ 新增/改名别名后先按**忽略大小写**查重；tools\compile_check.ps1 模式 B
+        ///   会解析本文件的 NameAlias 初始化器，重复时报出两个键各自的行号。
+        /// </summary>
+        private static readonly Dictionary<string, string> NameAlias =
+            new Dictionary<string, string>(StringComparer.OrdinalIgnoreCase)
+        {
+            // ---- 标题旋转菜单（纯图片按钮）----
+            { "Start",   "开始游戏" },
+            { "Load",    "读取存档" },
+            { "Gallery", "画廊" },
+            { "Options", "系统设置" },
+            { "Exit",    "退出游戏" },
+
+            // ---- 通用确认框（文字画在图片上）----
+            { "Yes",     "确定" },
+            { "No",      "取消" },
+            { "Confirm", "确定" },
+            { "Cancel",  "取消" },
+        };
+
+        // ================= 姓名输入框 =================
+        //
+        // level2（开局输入姓名）的两个输入框在场景里**没有任何标签文字**：
+        // 行名画在图片上，TMP 里读不到；对象名一个叫 FirstText（InputField）、
+        // 另一个叫 Third —— 后者尤其看不出是「名」。
+        //
+        // 唯一可靠的依据是游戏自己的 NameInputManagerTMP（反编译）：
+        //     public TMP_InputField surnameField1;   ← 姓
+        //     public TMP_InputField nameField1;      ← 名
+        // Unity 按声明顺序序列化，解析 level2 的组件字节确认这两个字段
+        // 分别指向场景里 FirstText（InputField）和 Third（恰好就是仅有的
+        // 两个激活输入框，Second / Fourth 未激活）。
+        //
+        // 这里用反射读，读不到就一路回退（占位提示 → 同行标签 → 对象名），
+        // 不让插件因为游戏改版而失效。
+
+        private static Type _nameMgrType;
+        private static bool _nameMgrProbed;
+        private static FieldInfo _surnameField;
+        private static FieldInfo _nameField;
+
+        private static string InputFieldRoleName(TMP_InputField inf)
+        {
+            try
+            {
+                if (!_nameMgrProbed)
+                {
+                    _nameMgrProbed = true;
+                    _nameMgrType = Type.GetType("NameInputManagerTMP, Assembly-CSharp");
+                    if (_nameMgrType == null)
+                    {
+                        // 游戏程序集名万一不是 Assembly-CSharp，就遍历已加载程序集
+                        Assembly[] all = AppDomain.CurrentDomain.GetAssemblies();
+                        for (int i = 0; i < all.Length && _nameMgrType == null; i++)
+                        {
+                            try { _nameMgrType = all[i].GetType("NameInputManagerTMP", false); }
+                            catch { }
+                        }
+                    }
+                    if (_nameMgrType != null)
+                    {
+                        _surnameField = _nameMgrType.GetField("surnameField1");
+                        _nameField = _nameMgrType.GetField("nameField1");
+                    }
+                }
+                if (_nameMgrType == null || _surnameField == null || _nameField == null) return "";
+
+                int id = inf.GetInstanceID();
+                string cached;
+                if (_inputRoles.TryGetValue(id, out cached)) return cached;
+
+                string role = "";
+                UnityEngine.Object[] found = Resources.FindObjectsOfTypeAll(_nameMgrType);
+                for (int i = 0; i < found.Length && role.Length == 0; i++)
+                {
+                    Component c = found[i] as Component;
+                    if (c == null) continue;
+                    if (ReferenceEquals(_surnameField.GetValue(c), inf)) role = "姓氏";
+                    else if (ReferenceEquals(_nameField.GetValue(c), inf)) role = "名字";
+                }
+                _inputRoles[id] = role;
+                return role;
+            }
+            catch { return ""; }
+        }
+
+        // ================= 平台层钩子（GameLabelOf 等）=================
+        //
+        // 平台层通过 A11yHost 调这几个方法，不知道本作的存在。
+        // 骨架给的都是**安全占位**：返回空/默认值，平台层会自动回退到
+        // 「TMP 文字 → 对象名别名 → 对象名」的老路。填了才会覆盖。
+        //
+        // 回退顺序（平台层 ResolveLabel）：Bound 文本 → GameLabelOf →
+        // 别名表 → 对象名。所以返回 "" 不会吞掉任何朗读。
+
+        /// <summary>
+        /// 给某个控件一个本作专属的朗读标签。返回 "" 表示不覆盖。
+        /// TODO 例：存档槽读出「第 3 页，2024-05-01 12:34」这种游戏数据里的信息。
+        /// </summary>
+        internal static string GameLabelOf(Selectable s)
+        {
+            if (s == null) return "";
+            return "";
+        }
+
+        /// <summary>
+        /// 给面板组起名。返回 "" 表示交给平台层回退（CJK 对象名或「面板 N」）。
+        /// TODO 例：if (root.name == "SaveSlotPanel") return "存档槽";
+        /// </summary>
+        internal static string GameGroupName(Transform root)
+        {
+            if (root == null) return "";
+            return "";
+        }
+
+        /// <summary>
+        /// 面板组的排序权重，小的在前。**必须返回 100 才等于平台默认顺序**
+        /// （平台层没填钩子时恒为 100）；按本作实测给常用组更小的值。
+        /// </summary>
+        internal static int GameGroupPriority(Transform root)
+        {
+            if (root == null) return 100;
+            return 100;
+        }
+
+        /// <summary>
+        /// 这段文字是不是「噪音」（不该被朗读）。返回 false 表示不覆盖。
+        /// TODO 例：把版本号 "v1.2.3"、版权行、无意义占位符标成 true。
+        /// </summary>
+        internal static bool GameTextIsNoise(string text)
+        {
+            if (string.IsNullOrEmpty(text)) return false;
+            return false;
+        }
+    }
+}

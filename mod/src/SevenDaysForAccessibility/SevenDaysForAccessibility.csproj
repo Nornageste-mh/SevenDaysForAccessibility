@@ -1,0 +1,93 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <!--
+    逐作 csproj 模板。new_game.py 会按 route 参数保留 MONO 或 IL2CPP 那一段，
+    删掉另一段和所有路线标记行。
+
+    ⚠ 这里原本写的是命令行的双横线参数名，而 XML 注释里**不允许出现连续两个减号**，
+      会让 MSBuild 直接报 MSB4025「未能加载项目文件」，新作骨架一生成就编不了。
+      0.1.0.1 改成不带横线的写法。
+
+    ★ 三行可复现构建属性**一条都不能少**（README「构建与打包」）：
+        Deterministic
+        IncludeSourceRevisionInInformationalVersion=false
+        EnableSourceLink=false
+      只关前两条是不够的：SDK 默认 EnableSourceLink=true，会把当前 git 提交写进 PDB，
+      PDB 的内容哈希又进 DLL 的 debug 目录与确定性 MVID。
+      有人就只关了第一条、以为修好了，一提交才发现产物还是变。
+  -->
+
+  <PropertyGroup>
+    <AssemblyName>SevenDaysForAccessibility</AssemblyName>
+    <RootNamespace>SevenDaysForAccessibility</RootNamespace>
+    <Version>0.1.0.0</Version>
+    <LangVersion>9.0</LangVersion>
+    <Nullable>disable</Nullable>
+    <ImplicitUsings>disable</ImplicitUsings>
+    <AppendTargetFrameworkToOutputPath>false</AppendTargetFrameworkToOutputPath>
+    <GenerateDocumentationFile>false</GenerateDocumentationFile>
+    <NoWarn>CS0169;CS0414;CS0649</NoWarn>
+
+    <!-- 可复现构建三行 -->
+    <Deterministic>true</Deterministic>
+    <IncludeSourceRevisionInInformationalVersion>false</IncludeSourceRevisionInInformationalVersion>
+    <EnableSourceLink>false</EnableSourceLink>
+
+    <EnableDefaultCompileItems>true</EnableDefaultCompileItems>
+    <TargetFramework>netstandard2.1</TargetFramework>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <!-- Mono 路线：BepInEx 5 的 core 由 build.ps1 下载到 mod\bep_dl\ -->
+    <Reference Include="BepInEx">
+      <HintPath>..\..\bep_dl\BepInEx\core\BepInEx.dll</HintPath>
+      <Private>false</Private>
+    </Reference>
+    <Reference Include="0Harmony">
+      <HintPath>..\..\bep_dl\BepInEx\core\0Harmony.dll</HintPath>
+      <Private>false</Private>
+    </Reference>
+  </ItemGroup>
+
+  <ItemGroup>
+    <!-- Mono 路线：从 <Game>_Data\Managed 直接引用 -->
+    <Reference Include="Assembly-CSharp">
+      <HintPath>$(SevenDaysGameDir)\The seven days i spent with you_Data\Managed\Assembly-CSharp.dll</HintPath>
+      <Private>false</Private>
+    </Reference>
+    <Reference Include="UnityEngine">
+      <HintPath>$(SevenDaysGameDir)\The seven days i spent with you_Data\Managed\UnityEngine.dll</HintPath>
+      <Private>false</Private>
+    </Reference>
+    <Reference Include="UnityEngine.CoreModule">
+      <HintPath>$(SevenDaysGameDir)\The seven days i spent with you_Data\Managed\UnityEngine.CoreModule.dll</HintPath>
+      <Private>false</Private>
+    </Reference>
+    <Reference Include="UnityEngine.UIModule">
+      <HintPath>$(SevenDaysGameDir)\The seven days i spent with you_Data\Managed\UnityEngine.UIModule.dll</HintPath>
+      <Private>false</Private>
+    </Reference>
+    <Reference Include="UnityEngine.UI">
+      <HintPath>$(SevenDaysGameDir)\The seven days i spent with you_Data\Managed\UnityEngine.UI.dll</HintPath>
+      <Private>false</Private>
+    </Reference>
+    <Reference Include="UnityEngine.InputLegacyModule">
+      <HintPath>$(SevenDaysGameDir)\The seven days i spent with you_Data\Managed\UnityEngine.InputLegacyModule.dll</HintPath>
+      <Private>false</Private>
+    </Reference>
+    <Reference Include="UnityEngine.TextRenderingModule">
+      <HintPath>$(SevenDaysGameDir)\The seven days i spent with you_Data\Managed\UnityEngine.TextRenderingModule.dll</HintPath>
+      <Private>false</Private>
+    </Reference>
+    <Reference Include="Unity.TextMeshPro">
+      <HintPath>$(SevenDaysGameDir)\The seven days i spent with you_Data\Managed\Unity.TextMeshPro.dll</HintPath>
+      <Private>false</Private>
+    </Reference>
+  </ItemGroup>
+
+  <!--
+    平台层（L1）从 A11yFramework 整份拷进 src\SevenDaysForAccessibility\ 下，
+    和逐作文件放在同一个目录里编译。默认的 glob 已经会带上它们，不需要额外配置。
+  -->
+
+</Project>
