@@ -20,42 +20,54 @@
     <!-- 探针插件要跟游戏里的 BepInEx 版本对齐：引用游戏目录下已安装的 BepInEx 核心程序集。
          若还没在游戏目录装 BepInEx，先跑一次 build.ps1 或手动装好。 -->
     <Reference Include="BepInEx">
-      <HintPath>D:\Steam\steamapps\common\我与你共度的七日\BepInEx\core\BepInEx.dll</HintPath>
+      <HintPath>..\..\mod\bep_dl\BepInEx\core\BepInEx.dll</HintPath>
       <Private>false</Private>
     </Reference>
     <Reference Include="0Harmony">
-      <HintPath>D:\Steam\steamapps\common\我与你共度的七日\BepInEx\core\0Harmony.dll</HintPath>
+      <HintPath>..\..\mod\bep_dl\BepInEx\core\0Harmony.dll</HintPath>
       <Private>false</Private>
     </Reference>
   </ItemGroup>
 
   <ItemGroup>
     <Reference Include="Assembly-CSharp">
-      <HintPath>D:\Steam\steamapps\common\我与你共度的七日\The seven days i spent with you_Data\Managed\Assembly-CSharp.dll</HintPath>
+      <HintPath>D:\Steam\steamapps\common\我与你共度的七日\game\The seven days i spent with you_Data\Managed\Assembly-CSharp.dll</HintPath>
+      <Private>false</Private>
+    </Reference>
+    <Reference Include="NodeCanvas">
+      <HintPath>D:\Steam\steamapps\common\我与你共度的七日\game\The seven days i spent with you_Data\Managed\NodeCanvas.dll</HintPath>
+      <Private>false</Private>
+    </Reference>
+    <Reference Include="ParadoxNotion">
+      <HintPath>D:\Steam\steamapps\common\我与你共度的七日\game\The seven days i spent with you_Data\Managed\ParadoxNotion.dll</HintPath>
       <Private>false</Private>
     </Reference>
     <Reference Include="UnityEngine">
-      <HintPath>D:\Steam\steamapps\common\我与你共度的七日\The seven days i spent with you_Data\Managed\UnityEngine.dll</HintPath>
+      <HintPath>D:\Steam\steamapps\common\我与你共度的七日\game\The seven days i spent with you_Data\Managed\UnityEngine.dll</HintPath>
       <Private>false</Private>
     </Reference>
     <Reference Include="UnityEngine.CoreModule">
-      <HintPath>D:\Steam\steamapps\common\我与你共度的七日\The seven days i spent with you_Data\Managed\UnityEngine.CoreModule.dll</HintPath>
+      <HintPath>D:\Steam\steamapps\common\我与你共度的七日\game\The seven days i spent with you_Data\Managed\UnityEngine.CoreModule.dll</HintPath>
+      <Private>false</Private>
+    </Reference>
+    <Reference Include="UnityEngine.AudioModule">
+      <HintPath>D:\Steam\steamapps\common\我与你共度的七日\game\The seven days i spent with you_Data\Managed\UnityEngine.AudioModule.dll</HintPath>
       <Private>false</Private>
     </Reference>
     <Reference Include="UnityEngine.UIModule">
-      <HintPath>D:\Steam\steamapps\common\我与你共度的七日\The seven days i spent with you_Data\Managed\UnityEngine.UIModule.dll</HintPath>
+      <HintPath>D:\Steam\steamapps\common\我与你共度的七日\game\The seven days i spent with you_Data\Managed\UnityEngine.UIModule.dll</HintPath>
       <Private>false</Private>
     </Reference>
     <Reference Include="UnityEngine.UI">
-      <HintPath>D:\Steam\steamapps\common\我与你共度的七日\The seven days i spent with you_Data\Managed\UnityEngine.UI.dll</HintPath>
+      <HintPath>D:\Steam\steamapps\common\我与你共度的七日\game\The seven days i spent with you_Data\Managed\UnityEngine.UI.dll</HintPath>
       <Private>false</Private>
     </Reference>
     <Reference Include="UnityEngine.InputLegacyModule">
-      <HintPath>D:\Steam\steamapps\common\我与你共度的七日\The seven days i spent with you_Data\Managed\UnityEngine.InputLegacyModule.dll</HintPath>
+      <HintPath>D:\Steam\steamapps\common\我与你共度的七日\game\The seven days i spent with you_Data\Managed\UnityEngine.InputLegacyModule.dll</HintPath>
       <Private>false</Private>
     </Reference>
     <Reference Include="Unity.TextMeshPro">
-      <HintPath>D:\Steam\steamapps\common\我与你共度的七日\The seven days i spent with you_Data\Managed\Unity.TextMeshPro.dll</HintPath>
+      <HintPath>D:\Steam\steamapps\common\我与你共度的七日\game\The seven days i spent with you_Data\Managed\Unity.TextMeshPro.dll</HintPath>
       <Private>false</Private>
     </Reference>
   </ItemGroup>

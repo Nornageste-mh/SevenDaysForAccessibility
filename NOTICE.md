@@ -1,30 +1,35 @@
 # 第三方组件与免责声明 / Third-Party Notices
 
-> 本文件是 [A11yFramework](https://github.com/Nornageste-mh/Framework.git) 生成的骨架，
-> **发布前必须按实际打进发布包的二进制逐项核对**，把 TODO 全部改掉。
 > 根目录 [`LICENSE`](LICENSE)（MIT）**只覆盖本作自己的代码**；下表第三方组件不受它授权，
-> 适用各自的许可条款，原文在 `mod/licenses/`（发布包里是 `licenses/`），必须随二进制分发。
+> 适用各自的许可条款，原文在 `mod\licenses\`（发布包里是 `licenses\`），随二进制一起分发。
 
 ## 1. 本作
 
-- 名称：我与你共度的七日 无障碍补丁（程序集 `SevenDaysForAccessibility`）
-- 引擎路线：mono
+- 名称：《我与你共度的七日》无障碍补丁（程序集 `SevenDaysForAccessibility`）
+- 引擎路线：Unity Mono + BepInEx 5
 - 本作代码许可：MIT，见根目录 [`LICENSE`](LICENSE)
+- 平台层（Speech/Nvda/Zdsr/Sapi/UiNav/Hotkey/KeyEdge/Repeat/GlobalKeys）与契约层 `A11yHost.cs`
+  来自 [A11yFramework](https://github.com/Nornageste-mh/Framework)，同样 MIT
 - 本项目是**非官方**第三方无障碍补丁
 
 ## 2. 随包分发的第三方二进制
 
 | 组件 | 版本 | 许可 | 许可证文本 |
 |---|---|---|---|
-| BepInEx | 5.4.23.5（TODO 按实际包核对） | MIT | licenses/MIT-BepInEx.txt |
-| HarmonyX | 随 BepInEx 5 | MIT | licenses/MIT-HarmonyX.txt |
-| UnityDoorstop | 随 BepInEx 5（winhttp.dll） | LGPL-2.1 | licenses/LGPL-2.1-UnityDoorstop.txt |
-| NVDA Controller Client | nvda_2026.2（TODO 核对） | LGPL-2.1 | licenses/LGPL-2.1-NVDA-ControllerClient.txt |
+| BepInEx | 5.4.23.5 | MIT | licenses/MIT-BepInEx.txt |
+| HarmonyX | 随 BepInEx 5（本作**运行时不使用**，仅 BepInEx 自带） | MIT | licenses/MIT-HarmonyX.txt |
+| UnityDoorstop | 随 BepInEx 5（`winhttp.dll`、`.doorstop_version` 4.5.0） | LGPL-2.1 | licenses/LGPL-2.1-UnityDoorstop.txt |
+| NVDA Controller Client | nvdaControllerClient.dll（x64，263,832 字节，取自本机 NVDA 2026.2 安装） | LGPL-2.1 | licenses/LGPL-2.1-NVDA-ControllerClient.txt |
+| **Mono 类库（BCL）** | 22 个程序集，见 `BepInEx\mono-bcl\` 与 `mod\bcl\SHA256SUMS.txt` | **MIT** | licenses/MIT-Mono.txt |
 
-> TODO 发布前按 `package\` 里实际存在的文件重列：版本号从下载的 zip 名 / 程序集
-> FileVersion 抄，不要沿用本骨架的示例值；新增或移除组件都要同步这张表。
-> 若使用 `licenses/il2cppinterop-pr277.patch` 对应的修复版 Il2CppInterop.Runtime.dll，
-> 还要在发布说明里写明来源（BepInEx 上游 PR #277）与修改内容。
+关于 Mono BCL：本作自带的 Mono 基础类库被裁剪（`mscorlib.dll` 2,679,808 字节，缺
+`Module.GetPEKind`；`System.Core.dll` 缺 `IGrouping`2.get_Key`），BepInEx 5 预加载器按完整 BCL 编译，
+必须附一套完整的 Mono 类库并用 UnityDoorstop 的 `dll_search_path_override` 指向它。
+这些程序集是 Mono 项目的开源类库（MIT），**不含任何游戏内容**，也不是从游戏文件反编译/提取所得。
+来源与哈希见 `mod\bcl\README.md` 与 `mod\bcl\SHA256SUMS.txt`。
+
+**不随包分发**：争渡（ZDSR）运行库 `ZDSRAPI.dll`（专有软件，由用户自行安装争渡读屏获得）、
+`BepInEx\interop\`、`BepInEx\unity-libs\`、玩家自己的配置文件。
 
 ## 3. 非官方声明
 
@@ -42,5 +47,5 @@
 ## 5. 禁止随包的内容
 
 发布包**不得**包含：`BepInEx\interop\`、`BepInEx\unity-libs\`、反编译/解包产物、
-游戏原始资源与剧本、开发机配置（`BepInEx\config\SevenDaysForAccessibility.cfg` 等）。这是 IP 与合规红线，
-`mod\build.ps1` 与 `mod\release.ps1` 会机械拦截。
+游戏原始资源与剧本、含台词原文的日志、开发机配置（`BepInEx\config\sevendays.a11y.reader.cfg`）。
+这是 IP 与合规红线，`mod\build.ps1` 会机械拦截。

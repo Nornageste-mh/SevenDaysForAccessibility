@@ -55,6 +55,12 @@
       <HintPath>$(SevenDaysGameDir)\The seven days i spent with you_Data\Managed\Assembly-CSharp.dll</HintPath>
       <Private>false</Private>
     </Reference>
+    <!-- 选项/台词管线在 NodeCanvas.dll（MultipleChoiceRequestInfo/SubtitlesRequestInfo/Statement
+         等，P0_recon_report §6 实查）；DialogueUGUI 本体反而在 Assembly-CSharp。 -->
+    <Reference Include="NodeCanvas">
+      <HintPath>$(SevenDaysGameDir)\The seven days i spent with you_Data\Managed\NodeCanvas.dll</HintPath>
+      <Private>false</Private>
+    </Reference>
     <Reference Include="UnityEngine">
       <HintPath>$(SevenDaysGameDir)\The seven days i spent with you_Data\Managed\UnityEngine.dll</HintPath>
       <Private>false</Private>

@@ -178,6 +178,43 @@ Copy-Item $nvdaDll.FullName -Destination $plugDir -Force
 # 同时放一份到包根：DllImport 会先查应用目录
 Copy-Item $nvdaDll.FullName -Destination (Join-Path $pkg "nvdaControllerClient.dll") -Force
 
+# ------------------------------------------------------------
+# 本作特有：完整 Mono BCL（见 mod\bcl\README.md）。
+# 本作的 Mono BCL 被裁剪过：mscorlib 没有 Module.GetPEKind、System.Core 缺
+# IGrouping`2.get_Key，BepInEx 5 预加载器按完整 BCL 编译，原样装会在
+# PreloaderPreMain() 直接 MissingMethodException。实测唯一解：把完整 BCL 放进
+# BepInEx\mono-bcl，并让 UnityDoorstop 用 dll_search_path_override 指向它。
+$bclSrc = Join-Path $mod "bcl"
+if (-not (Test-Path -LiteralPath $bclSrc)) {
+    Write-Host "    找不到 mod\bcl\（完整 Mono BCL）；本作没有它 BepInEx 起不来" -ForegroundColor Red
+    exit 1
+}
+$bclDest = Join-Path $pkg "BepInEx\mono-bcl"
+New-Item -ItemType Directory -Force -Path $bclDest | Out-Null
+Copy-Item (Join-Path $bclSrc "*.dll") -Destination $bclDest -Force
+if (-not (Test-Path -LiteralPath (Join-Path $bclDest "mscorlib.dll"))) {
+    Write-Host "    BCL 里没有 mscorlib.dll，包不完整" -ForegroundColor Red
+    exit 1
+}
+Ok "已放入完整 Mono BCL：BepInEx\mono-bcl（$((Get-ChildItem $bclDest -File).Count) 个 dll）"
+
+# doorstop 配置里指向这个目录（幂等：有这行就改写，没有就追加）。
+$dsCfg = Join-Path $pkg "doorstop_config.ini"
+if (-not (Test-Path -LiteralPath $dsCfg)) {
+    Write-Host "    doorstop_config.ini 不在包里，安装后补丁不会注入" -ForegroundColor Red
+    exit 1
+}
+$dtxt = [System.IO.File]::ReadAllText($dsCfg)
+$dpat = '(?m)^[ \t]*dll_search_path_override[ \t]*=.*$'
+$dline = 'dll_search_path_override = BepInEx\mono-bcl'
+if ([regex]::IsMatch($dtxt, $dpat)) {
+    $dtxt = [regex]::Replace($dtxt, $dpat, $dline)
+} else {
+    $dtxt = $dtxt.TrimEnd("`r", "`n") + "`r`n" + $dline + "`r`n"
+}
+[System.IO.File]::WriteAllText($dsCfg, $dtxt, (New-Object System.Text.UTF8Encoding $false))
+Ok "doorstop_config.ini：dll_search_path_override = BepInEx\mono-bcl"
+
 # 根许可证与通知：LICENSE 只覆盖本仓库自己的代码；第三方二进制（BepInEx、
 # UnityDoorstop、Il2CppInterop、NVDA）各自的文本在 licenses\，由 NOTICE.md 指路。
 foreach ($f in @("LICENSE", "NOTICE.md")) {

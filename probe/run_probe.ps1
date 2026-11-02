@@ -9,7 +9,9 @@ public class WinB {
 }
 "@
 
-$G = 'D:\Steam\steamapps\common\我与你共度的七日'
+# 本作真正的 exe 在 Steam 公共目录的 game\ 子目录（启动器 SevenDaysLauncher.exe 在外层），
+# BepInEx 与探针日志都跟着 exe 走。
+$G = 'D:\Steam\steamapps\common\我与你共度的七日\game'
 # $P = 本脚本所在目录（展开骨架后就是新作的 probe\）
 $P = $PSScriptRoot
 $log = "$G\BepInEx\probe_The seven days i spent with you.log"

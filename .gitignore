@@ -35,6 +35,13 @@ probe/evidence/*.png
 probe/evidence/*.log
 probe/evidence/LogOutput*.log
 
+# 完整 Mono BCL（22 个 dll，17 MB）：构建要用，但不入版本库（同 bep_dl 的待遇）。
+# 需要的机器上从发布 zip 里取，或按 mod/bcl/README.md 的说明放置；哈希见 SHA256SUMS.txt。
+mod/bcl/*.dll
+# 探针/冒烟留下的游戏截图与含台词日志（IP 红线：游戏画面与台词原文不入库）
+probe/*.png
+probe/*.log
+sevendays_work/
 # ---- 2) 构建噪音 ----
 
 # 下载的 BepInEx / NVDA zip
