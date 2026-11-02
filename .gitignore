@@ -56,8 +56,9 @@ obj/
 *.user
 *.suo
 .vs/
-# 组装出来的安装包，不是源码
-package/
+# 组装出来的安装包，不是源码；手写说明要进库（与《透明》仓库一致）
+/mod/package/*
+!/mod/package/安装说明.txt
 # compile_check.ps1 的临时工程
 .compilecheck/
 

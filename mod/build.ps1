@@ -13,7 +13,7 @@
 
     安装包不含安装程序：补丁是 BepInEx 运行时挂载的，不修改游戏文件，
     安装就是「把 package\ 里的东西拷进有 The seven days i spent with you.exe 的那一层」。
-    手写说明见 package\安装说明.md。
+    手写说明见 package\安装说明.txt。
 
     两条引擎路线共用本模板，由 tools\new_game.py 在生成时按 @@ROUTE 标记裁掉
     不属于本作的那一半：
@@ -157,7 +157,7 @@ Ok $pluginDll
 Step "5/5  组装安装包"
 $pkg = Join-Path $mod "package"
 # 保留自产的说明文件，其余重建
-$keep = @("安装说明.md", "常见问题.md")
+$keep = @("安装说明.txt")
 $saved = @{}
 foreach ($k in $keep) {
     $p = Join-Path $pkg $k

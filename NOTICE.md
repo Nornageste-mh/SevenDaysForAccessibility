@@ -1,51 +1,100 @@
-# 第三方组件与免责声明 / Third-Party Notices
+# 附加条款与免责声明 / Additional Terms and Disclaimer
 
-> 根目录 [`LICENSE`](LICENSE)（MIT）**只覆盖本作自己的代码**；下表第三方组件不受它授权，
-> 适用各自的许可条款，原文在 `mod\licenses\`（发布包里是 `licenses\`），随二进制一起分发。
+> **适用关系**：本文件是对仓库根目录 [`LICENSE`](LICENSE)（MIT 许可）的补充说明
+> 与明确化，**不缩减** MIT 许可已授予的任何权利。若两者冲突，以 MIT 许可为准。
+> 本文件由开源项目通用模板改写，**不构成法律意见**。
 
-## 1. 本作
+================================================================================
+附加条款 / ADDITIONAL TERMS
+================================================================================
 
-- 名称：《我与你共度的七日》无障碍补丁（程序集 `SevenDaysForAccessibility`）
-- 引擎路线：Unity Mono + BepInEx 5
-- 本作代码许可：MIT，见根目录 [`LICENSE`](LICENSE)
-- 平台层（Speech/Nvda/Zdsr/Sapi/UiNav/Hotkey/KeyEdge/Repeat/GlobalKeys）与契约层 `A11yHost.cs`
-  来自 [A11yFramework](https://github.com/Nornageste-mh/Framework)，同样 MIT
-- 本项目是**非官方**第三方无障碍补丁
+1. 署名 / Attribution
+---------------------
 
-## 2. 随包分发的第三方二进制
+凡复制、修改、分发本软件，或以本软件为基础创作衍生作品，均须以显著方式标注：
 
-| 组件 | 版本 | 许可 | 许可证文本 |
+  (a) 原始出处：https://github.com/Nornageste-mh/SevenDaysForAccessibility.git，
+      以及作者 Nornageste-mh；
+  (b) 若发生修改，须注明「已修改」及修改要点，不得让他人误以为修改版
+      出自原作者或获得原作者背书。
+
+标注位置可为 README、项目文档、关于界面、发行说明或源码头部之一，
+且须随分发物一同提供。
+
+Any copy, modification, distribution, or derivative work must prominently
+credit the origin: this repository's URL and the author Nornageste-mh. If you
+changed anything, state that it was modified. Do not imply that a modified
+version was produced or endorsed by the original author.
+
+2. 非官方声明 / Unofficial Project
+----------------------------------
+
+本软件是非官方的第三方无障碍辅助项目，与本软件所适配的游戏《我与你共度的七日》
+（开发 RErevue_studio、发行 LoveStoryProject）及其开发商、发行商、版权方
+不存在任何隶属、合作、赞助、授权或背书关系。
+相关商标、作品名称与内容的全部权利归各自权利人所有。
+
+This is an unofficial, third-party accessibility project. It is not
+affiliated with, authorized by, sponsored by, or endorsed by any game,
+software, platform, developer, or publisher that it is designed to work with.
+All trademarks and content remain the property of their respective owners.
+
+3. 免责与责任限制 / Disclaimer and Limitation of Liability
+----------------------------------------------------------
+
+本软件按「现状」提供，不附带任何形式的明示或默示担保。在适用法律允许的
+最大范围内，作者与贡献者对因使用或无法使用本软件而产生的任何直接、间接、
+附带、特殊、惩罚性或后果性损害均不承担责任。这包括但不限于：
+
+  (a) 游戏存档损坏、丢失或无法读取，游戏无法启动、崩溃或数据异常；
+  (b) 游戏账号被限制、封禁，或游戏服务条款、最终用户许可协议被认定违反；
+  (c) 与游戏开发商、发行商、平台运营方或任何第三方之间产生的争议、
+      索赔、诉讼、禁令或任何形式的损失；
+  (d) 设备损坏、系统故障、数据丢失或其他财产损失；
+  (e) 第三方组件自身的许可瑕疵、权利主张或由此引发的任何责任。
+
+是否使用本软件由你自行决定并自行承担全部风险。你应自行确认在当地法律及
+相关服务条款下使用本软件是否合规。
+
+THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND. TO THE
+MAXIMUM EXTENT PERMITTED BY APPLICABLE LAW, THE AUTHORS AND CONTRIBUTORS
+SHALL NOT BE LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY,
+OR CONSEQUENTIAL DAMAGES ARISING FROM THE USE OF OR INABILITY TO USE THE
+SOFTWARE. THIS INCLUDES, WITHOUT LIMITATION: SAVE DATA LOSS OR CORRUPTION;
+GAME OR SOFTWARE FAILURE; ACCOUNT RESTRICTION OR BAN; ANY DISPUTE, CLAIM, OR
+ACTION BY A GAME DEVELOPER, PUBLISHER, PLATFORM, OR OTHER THIRD PARTY; AND ANY
+DEFECT IN THIRD-PARTY COMPONENTS. YOU USE THIS SOFTWARE AT YOUR OWN RISK.
+
+4. 第三方组件 / Third-Party Components
+--------------------------------------
+
+本软件可能包含或依赖第三方代码。该部分不受本许可授权，其版权与许可归
+各自权利人所有，并适用其各自的许可条款。分发时须保留其原始版权声明与
+许可文本。
+
+This software may include or depend on third-party code, which is licensed
+under its own terms and is not covered by this license. Their copyright
+notices and license texts must be preserved.
+
+5. 本仓库第三方组件明细 / Third-Party Components in This Repository
+-------------------------------------------------------------------
+
+下表为本仓库实际涉及或依赖的第三方组件，**不受本 MIT 许可授权**，适用其各自许可：
+
+| 组件 | 许可 | 权利人 | 说明 |
 |---|---|---|---|
-| BepInEx | 5.4.23.5 | MIT | licenses/MIT-BepInEx.txt |
-| HarmonyX | 随 BepInEx 5（本作**运行时不使用**，仅 BepInEx 自带） | MIT | licenses/MIT-HarmonyX.txt |
-| UnityDoorstop | 随 BepInEx 5（`winhttp.dll`、`.doorstop_version` 4.5.0） | LGPL-2.1 | licenses/LGPL-2.1-UnityDoorstop.txt |
-| NVDA Controller Client | nvdaControllerClient.dll（x64，263,832 字节，取自本机 NVDA 2026.2 安装） | LGPL-2.1 | licenses/LGPL-2.1-NVDA-ControllerClient.txt |
-| **Mono 类库（BCL）** | 22 个程序集，见 `BepInEx\mono-bcl\` 与 `mod\bcl\SHA256SUMS.txt` | **MIT** | licenses/MIT-Mono.txt |
+| BepInEx 5.4.23.5 | **MIT**（BepInEx 6 才是 LGPL-2.1） | BepInEx 项目 | 构建脚本 `build.ps1` 取得；随发布包分发时保留 `licenses/MIT-BepInEx.txt` |
+| HarmonyX / Mono.Cecil / MonoMod | MIT | 各自项目 | 随 BepInEx 5 分发；本作**运行时不用** Harmony，仅 BepInEx 自带 |
+| UnityDoorstop（`winhttp.dll`、`.doorstop_version`） | LGPL-2.1 | 0x0ade / NeighTools | 随 BepInEx 5 分发；附 `licenses/LGPL-2.1-UnityDoorstop.txt` |
+| NVDA Controller Client（`nvdaControllerClient.dll`，x64） | LGPL-2.1 | NV Access | 构建脚本取得；随包分发须附 `licenses/LGPL-2.1-NVDA-ControllerClient.txt` 与源码获取途径 |
+| Mono 类库（`BepInEx\mono-bcl\`，22 个 dll） | **MIT** | Mono 项目 / .NET Foundation | 本作自带的 Mono BCL 被裁剪，必须附一套完整类库；**不含任何游戏内容**，非反编译产物；见 `licenses/MIT-Mono.txt` 与 `mod/bcl/README.md` |
 
-关于 Mono BCL：本作自带的 Mono 基础类库被裁剪（`mscorlib.dll` 2,679,808 字节，缺
-`Module.GetPEKind`；`System.Core.dll` 缺 `IGrouping`2.get_Key`），BepInEx 5 预加载器按完整 BCL 编译，
-必须附一套完整的 Mono 类库并用 UnityDoorstop 的 `dll_search_path_override` 指向它。
-这些程序集是 Mono 项目的开源类库（MIT），**不含任何游戏内容**，也不是从游戏文件反编译/提取所得。
-来源与哈希见 `mod\bcl\README.md` 与 `mod\bcl\SHA256SUMS.txt`。
+**不随包分发**：争渡读屏（ZDSR）的 `ZDSRAPI*.dll`（专有软件，由玩家自行安装争渡获得）、
+`BepInEx\interop\`、`BepInEx\unity-libs\`、玩家自己的配置文件与存档。
 
-**不随包分发**：争渡（ZDSR）运行库 `ZDSRAPI.dll`（专有软件，由用户自行安装争渡读屏获得）、
-`BepInEx\interop\`、`BepInEx\unity-libs\`、玩家自己的配置文件。
+分发本软件时，须保留上述组件的原始版权声明与许可文本。若你重新分发本项目的
+构建产物，请自行确认已满足全部第三方许可的署名、附随与源码提供要求。
 
-## 3. 非官方声明
-
-本软件是非官方的第三方无障碍辅助项目，与《我与你共度的七日》的开发商、发行商、平台
-及任何相关权利方**不存在**隶属、合作、赞助、授权或背书关系。相关商标、作品名称
-与内容的全部权利归各自权利人所有。
-
-## 4. 免责
-
-本软件按「现状」提供，不附带任何明示或默示担保。在适用法律允许的最大范围内，
-作者与贡献者对因使用或无法使用本软件产生的任何直接、间接、附带、特殊或后果性
-损害不承担责任，包括但不限于存档损坏/丢失、游戏无法启动或崩溃、账号被限制、
-与服务条款或 EULA 相关的争议。是否使用由你自行决定并承担全部风险。
-
-## 5. 禁止随包的内容
-
-发布包**不得**包含：`BepInEx\interop\`、`BepInEx\unity-libs\`、反编译/解包产物、
-游戏原始资源与剧本、含台词原文的日志、开发机配置（`BepInEx\config\sevendays.a11y.reader.cfg`）。
-这是 IP 与合规红线，`mod\build.ps1` 会机械拦截。
+The components above are licensed under their own terms and are **not** covered
+by this MIT license. Preserve their copyright notices and license texts when
+redistributing.
