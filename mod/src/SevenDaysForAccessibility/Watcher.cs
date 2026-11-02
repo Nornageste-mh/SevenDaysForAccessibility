@@ -146,8 +146,6 @@ namespace SevenDaysForAccessibility
             bool withName = Plugin.CfgSpeakName != null && Plugin.CfgSpeakName.Value;
             string line = (withName && name.Length > 0) ? name + "，" + text : text;
 
-            // 有配音的行默认也朗读：语音是日配，读屏用户听不懂，只听语音等于没读到台词。
-            // 关掉「朗读有配音的台词」后这些行只记录不朗读（仍可按重读键补读）。
 
             // 快进（S / Ctrl）期间不朗读，只记下来；停止时补念最后一句。
             // 为什么用「记下这一句」而不是停止时调 Repeat.Again()：Again 念的是缓冲区
@@ -162,9 +160,15 @@ namespace SevenDaysForAccessibility
             }
             _skipLine = null;
 
-            bool readThis = !voiced || Plugin.CfgReadVoiced == null || Plugin.CfgReadVoiced.Value;
-            if (readThis) Repeat.Say(line, true);
-            else Repeat.Note(line);
+            // 有配音的行：只记不念。语音已经在播，再让 TTS 念一遍就是叠音
+            // （Framework 的 Repeat 规则：有配音的行不自动朗读，但必须进重读缓冲区，
+            // 否则读屏用户永远听不到这句台词 —— 按重读键可以补读）。
+            if (voiced)
+            {
+                Repeat.Note(line);
+                return;
+            }
+            Repeat.Say(line, true);
         }
 
         // ------------------------------------------------------------------ 选项

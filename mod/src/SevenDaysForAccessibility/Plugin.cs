@@ -67,7 +67,6 @@ namespace SevenDaysForAccessibility
         // 中文说明里**写实测数字** —— 那是本补丁的可信度来源。
 
         // ---- 朗读 ----
-        internal static ConfigEntry<bool> CfgReadVoiced;
         internal static ConfigEntry<bool> CfgSpeakName;
         internal static ConfigEntry<bool> CfgReadChoices;
         internal static ConfigEntry<bool> CfgChoiceHotkeys;
@@ -118,14 +117,6 @@ namespace SevenDaysForAccessibility
             // ================================================================
             // 2) 注册配置项（三组组名固定：「朗读」「界面导航」「其它」）
             // ================================================================
-            CfgReadVoiced = Config.Bind("朗读", "朗读有配音的台词", true,
-                "有配音的台词也用读屏念出来（默认开）。本作女主等角色台词带语音，语音是日配、\n" +
-                "读屏用户听不懂，所以默认连有配音的行也朗读；朗读与语音会同时出声，\n" +
-                "不想听读屏盖住语音就关掉这一项（关掉后这些行只能按重读键手动补读）。\n" +
-                "配音有无由运行时 BacklogData.VoiceFileName 逐行判定。\n" +
-                "本作待朗读正文共 2067 条（本地化表 StringLanguage 统计，\n" +
-                "sevendays_work\\text\\text_inventory.md）。");
-
             CfgSpeakName = Config.Bind("朗读", "朗读时带上说话人", true,
                 "在台词前加上说话人名字（读作「名字，台词」）。旁白没有名字\n" +
                 "（BacklogData.Name 为空），不会加前缀。");
